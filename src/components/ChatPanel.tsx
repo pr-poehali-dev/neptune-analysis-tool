@@ -3,25 +3,25 @@ import { useState, useEffect, useRef } from "react"
 import { useUIStore } from "@/lib/ui-store"
 import { Button } from "@/components/ui/button"
 
-const QUICK_CHIPS = ["Кто ты?", "Покажи арт", "Над чем работаешь?"]
+const QUICK_CHIPS = ["Что такое Vilong?", "Продукты", "Контакты"]
 
 const RESPONSES: Record<string, string> = {
-  "Кто ты?": "Я AI-помощник Алекса! Помогаю показать работы и рассказать о нем. Хочешь узнать больше?",
-  "Покажи арт":
-    "С удовольствием покажу работы Алекса! В них сочетаются цифровые и традиционные техники.",
-  "Над чем работаешь?":
-    "Сейчас в работе несколько проектов! Алекс занимается AI-приложениями и креативным кодингом.",
+  "Что такое Vilong?": "Vilong Company — экосистема брендов, охватывающая все сферы вашей жизни: от книг до электроники. Мы создаём продукты, которые делают жизнь лучше.",
+  "Продукты":
+    "В нашей экосистеме: VilongBooks — книги и знания, Videluxe — премиальные ноутбуки, и многое другое. Открой раздел «Продукты», чтобы узнать больше!",
+  "Контакты":
+    "Свяжитесь с нами через форму обратной связи или напишите напрямую. Мы всегда рады новым партнёрствам и сотрудничеству!",
 }
 
 const ACTION_RESPONSES: Record<string, { response: string; action: string }> = {
-  "открой арт": { response: "Открываю галерею!", action: "art" },
-  "покажи арт": { response: "Открываю раздел с артом!", action: "art" },
-  "открой резюме": { response: "Открываю резюме!", action: "resume" },
-  "покажи резюме": { response: "Вот резюме!", action: "resume" },
-  "открой обо мне": { response: "Открываю раздел обо мне!", action: "about" },
-  "покажи обо мне": { response: "Расскажу об Алексе!", action: "about" },
-  "открой статьи": { response: "Открываю статьи!", action: "writings" },
-  "покажи статьи": { response: "Вот статьи!", action: "writings" },
+  "открой продукты": { response: "Открываю каталог продуктов Vilong!", action: "art" },
+  "покажи продукты": { response: "Вот что мы производим!", action: "art" },
+  "открой о компании": { response: "Рассказываю о Vilong Company!", action: "about" },
+  "покажи о компании": { response: "Открываю раздел о компании!", action: "about" },
+  "открой новости": { response: "Открываю последние новости!", action: "writings" },
+  "покажи новости": { response: "Вот наши последние новости!", action: "writings" },
+  "открой бренды": { response: "Открываю портфель брендов!", action: "resume" },
+  "покажи бренды": { response: "Вот бренды нашей экосистемы!", action: "resume" },
 }
 
 type AppType = "about" | "resume" | "writings" | "art"
@@ -37,7 +37,7 @@ export function ChatPanel() {
   }, [messages])
 
   const handleChipClick = (chip: string) => {
-    const response = RESPONSES[chip] || "Интересный вопрос! Дай подумать..."
+    const response = RESPONSES[chip] || "Интересный вопрос! Дайте мне подумать..."
     setMessages((prev) => [...prev, { text: chip, isUser: true }, { text: response, isUser: false }])
   }
 
@@ -48,7 +48,6 @@ export function ChatPanel() {
     const userMessage = inputValue.trim()
     setInputValue("")
 
-    // Check if it's an action command
     const lowerMessage = userMessage.toLowerCase()
     const actionMatch = Object.keys(ACTION_RESPONSES).find((key) => lowerMessage.includes(key))
 
@@ -60,9 +59,8 @@ export function ChatPanel() {
         openOS(action as AppType)
       }, 1000)
     } else {
-      // Default response for non-action messages
       const defaultResponse =
-        "Интересно! Я помогу изучить работы Алекса. Попробуй написать «открой арт» или «покажи резюме»!"
+        "Добро пожаловать в Vilong! Попробуйте написать «открой продукты» или «покажи бренды»."
       setMessages((prev) => [...prev, { text: userMessage, isUser: true }, { text: defaultResponse, isUser: false }])
     }
   }
@@ -74,7 +72,7 @@ export function ChatPanel() {
           <div key={i} className={`flex ${msg.isUser ? "justify-end" : "justify-start"}`}>
             <div
               className={`max-w-[80%] p-3 border-[3px] border-black shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] ${
-                msg.isUser ? "bg-[#FF2E63] text-white" : "bg-white text-black"
+                msg.isUser ? "bg-[#1A1AFF] text-white" : "bg-white text-black"
               }`}
             >
               <p className="text-sm font-medium leading-tight">{msg.text}</p>
@@ -90,19 +88,18 @@ export function ChatPanel() {
             type="text"
             value={inputValue}
             onChange={(e) => setInputValue(e.target.value)}
-            placeholder="Напиши сообщение или команду..."
+            placeholder="Спросите о продуктах Vilong..."
             className="flex-1 p-3 border-[3px] border-black shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] bg-white text-black font-medium text-sm focus:outline-none focus:shadow-[1px_1px_0px_0px_rgba(0,0,0,1)] focus:translate-x-[1px] focus:translate-y-[1px] transition-all"
           />
           <Button
             type="submit"
-            className="bg-[#FF2E63] text-white border-[3px] border-black shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] hover:shadow-[1px_1px_0px_0px_rgba(0,0,0,1)] hover:translate-x-[1px] hover:translate-y-[1px] transition-all font-bold px-4"
+            className="bg-[#1A1AFF] text-white border-[3px] border-black shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] hover:shadow-[1px_1px_0px_0px_rgba(0,0,0,1)] hover:translate-x-[1px] hover:translate-y-[1px] transition-all font-bold px-4"
           >
             Отправить
           </Button>
         </div>
       </form>
 
-      {/* Quick Action Chips */}
       <div className="flex flex-wrap gap-2 justify-center">
         {QUICK_CHIPS.map((chip) => (
           <Button
